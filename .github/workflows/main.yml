@@ -23,5 +23,7 @@ jobs:
           python3 -m pip install "molecule[docker,lint,ansible]"
       - name: Test with molecule
         run: |
+          pwd
+          ls
           cd roles/cwl
           molecule test
