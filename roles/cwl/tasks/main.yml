@@ -17,12 +17,11 @@
 
 - name: Install dependencies for cwl
   yum:
-    name: ['python2-pip', 'python2-devel', 'python-virtualenv']
+    name: ['python2-pip', 'python2-devel', 'python-virtualenv', 'gcc']
     state: present
   become: yes
   become_user: root
   become_method: su
-
 
 # Install cwlref-runner in venv
 
@@ -31,7 +30,6 @@
     name: cwlref-runner
     virtualenv: ~/cwl_test
     virtualenv_python: python2.7
-
 
 # Create files to run hello world.
 
