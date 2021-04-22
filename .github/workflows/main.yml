@@ -25,5 +25,6 @@ jobs:
         run: |
           pwd
           ls
+          tree
           cd roles/cwl
           molecule test
