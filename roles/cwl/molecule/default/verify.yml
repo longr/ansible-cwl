@@ -5,6 +5,39 @@
   hosts: all
   gather_facts: false
   tasks:
-  - name: Example assertion
+  - name: Create Input file
+    copy:
+      dest: ~/cwl_test/example-job.yaml
+      content: |
+        message: Hello world!
+  - name: Create job file
+    copy:
+      dest: ~/cwl_test/example.cwl
+      content: |
+        cwlVersion: v1.0
+        class: CommandLineTool
+        baseCommand: echo
+        stdout: output.txt
+        inputs:
+          message:
+            type: string
+            inputBinding:
+              position: 1
+        outputs:
+          output:
+            type: stdout
+
+  - name: Run cwlrunner
+    shell: |
+      cd ~/cwl_test
+      source bin/activate
+      cwl-runner example.cwl example-job.yaml
+
+  - name: Get output.txt location
+    stat:
+      path: ~/cwl_test/output.txt
+    register: cwl_output
+  - name: Assert output.txt exists
     assert:
-      that: true
+      that:
+        - cwl_output.stat.exists
