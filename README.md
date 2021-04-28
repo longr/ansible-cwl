@@ -1,3 +1,6 @@
+![CWL Engines](https://github.com/longr/ansible-cwl/actions/workflows/main.yml/badge.svg)
+
+
 # Ansible scripts for installing CWL engines
 
 Caution, these are currently setup for CentOS7 only and insome cases use a specific username.
