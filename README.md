@@ -1,4 +1,4 @@
-![CWL Engines](https://github.com/longr/ansible-cwl/actions/workflows/main.yml/badge.svg)
+[![CWL Engines](https://github.com/longr/ansible-cwl/actions/workflows/main.yml/badge.svg)](https://github.com/longr/ansible-cwl/actions)
 
 
 # Ansible scripts for installing CWL engines
