@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        wfe: ['cwl', 'toil']
+        wfe: ['cwl', 'toil', 'airflow']
         python-version: [3.6]
 
     steps:
