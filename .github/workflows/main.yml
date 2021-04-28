@@ -21,7 +21,11 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip
           python3 -m pip install "molecule[docker,lint,ansible]"
-      - name: Test with molecule
+      - name: Test CWL with molecule
         run: |
           cd molecule_demo/roles/cwl
+          molecule test
+      - name: Test Toil with molecule
+        run: |
+          cd molecule_demo/roles/toil
           molecule test
