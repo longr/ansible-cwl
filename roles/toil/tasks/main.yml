@@ -23,7 +23,7 @@
 - name: install toil
   pip:
     name:
-      - toil[cwl]
+      - toil[cwl]==5.2.0
     executable: pip3
   become: true
   become_user: root
