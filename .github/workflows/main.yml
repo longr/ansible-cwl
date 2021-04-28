@@ -6,6 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
+        wfe: ['cwl', 'toil']
         python-version: [3.6]
 
     steps:
@@ -20,11 +21,7 @@ jobs:
         run: |
           python3 -m pip install --upgrade pip
           python3 -m pip install "molecule[docker,lint,ansible]"
-      - name: Molecule - Test CWL
+      - name: Molecule - Test ${{ matrix.wfe }}
         run: |
-          cd molecule_demo/roles/cwl
-          molecule test
-      - name: Molecule - Test Toil
-        run: |
-          cd molecule_demo/roles/toil
+          cd molecule_demo/roles/${{ matrix.wfe }}
           molecule test
