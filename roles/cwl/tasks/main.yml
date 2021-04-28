@@ -23,10 +23,12 @@
   become_user: root
   become_method: su
 
-# Install cwlref-runner in venv
+# Install cwlref-runner
 
 - name: install cwl in virtualenv
   pip:
     name: cwlref-runner
-    virtualenv: ~/cwl_test
-    virtualenv_python: python3
+    executable: pip3
+  become: yes
+  become_user: root
+  become_method: su

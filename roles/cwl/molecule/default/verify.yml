@@ -5,12 +5,20 @@
   hosts: all
   gather_facts: false
   tasks:
-  - name: Create Input file
+  - name: Create a directory to test in
+    file:
+      path: /root/cwl_test
+      state: directory
+      mode: '0755'
+      
+  - name: Create CWL job file
     copy:
       dest: ~/cwl_test/example-job.yaml
       content: |
-        message: Hello world!
-  - name: Create job file
+        message: Hello word!
+      mode: '0755'
+        
+  - name: Create CWL file
     copy:
       dest: ~/cwl_test/example.cwl
       content: |
@@ -26,14 +34,14 @@
         outputs:
           output:
             type: stdout
+      mode: '0755'
 
   - name: Run cwlrunner
     shell: |
       cd ~/cwl_test
-      source bin/activate
       cwl-runner example.cwl example-job.yaml
 
-  - name: Get output.txt location
+  - name: Check output file was created
     stat:
       path: ~/cwl_test/output.txt
     register: cwl_output
