@@ -5,9 +5,8 @@ jobs:
   build:
     runs-on: ubuntu-latest
     strategy:
-      max-parallel: 4
       matrix:
-        python-version: [3.6, 3.7]
+        python-version: [3.6]
 
     steps:
       - uses: actions/checkout@v2
@@ -17,15 +16,15 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: ${{ matrix.python-version }}
-      - name: Install dependencies
+      - name: Install dependencies for Molecule
         run: |
           python3 -m pip install --upgrade pip
           python3 -m pip install "molecule[docker,lint,ansible]"
-      - name: Test CWL with molecule
+      - name: Molecule - Test CWL
         run: |
           cd molecule_demo/roles/cwl
           molecule test
-      - name: Test Toil with molecule
+      - name: Molecule - Test Toil
         run: |
           cd molecule_demo/roles/toil
           molecule test
