@@ -1,0 +1,23 @@
+---
+dependency:
+  name: galaxy
+driver:
+  name: docker
+lint: |
+  set -e
+  yamllint .
+platforms:
+  - name: cwl-airflow
+    image: "centos:8"
+    privileged: true
+provisioner:
+  name: ansible
+  lint: |
+     ansible-lint
+scenario:
+  name: default
+verifier:
+  name: ansible
+  lint: |
+    set -e
+    ansible-lint
