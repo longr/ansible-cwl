@@ -1,0 +1,52 @@
+---
+# This is an example playbook to execute Ansible tests.
+
+- name: Verify
+  hosts: all
+  gather_facts: false
+  tasks:
+  - name: Create a directory to test in
+    file:
+      path: /root/cromwell_test
+      state: directory
+      mode: '0755'
+      
+  - name: Create CWL job file
+    copy:
+      dest: ~/cromwell_test/example-job.yaml
+      content: |
+        message: Hello word!
+      mode: '0755'
+        
+  - name: Create CWL file
+    copy:
+      dest: ~/cromwell_test/example.cwl
+      content: |
+        cwlVersion: v1.0
+        class: CommandLineTool
+        baseCommand: echo
+        stdout: output.txt
+        inputs:
+          message:
+            type: string
+            inputBinding:
+              position: 1
+        outputs:
+          output:
+            type: stdout
+      mode: '0755'
+
+  - name: Run cwlrunner
+    shell: |
+      cd ~/cromwell_test
+      conda activate cromwell_test
+      cromwell run example.cwl -i example-job.yaml
+
+  - name: Check output file was created
+    stat:
+      path: ~/cromwell_test/output.txt
+    register: cwl_output
+  - name: Assert output.txt exists
+    assert:
+      that:
+        - cwl_output.stat.exists
