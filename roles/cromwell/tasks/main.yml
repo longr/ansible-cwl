@@ -17,20 +17,23 @@
   become: true
   become_user: root
   become_method: su
-  
-- name: Check path in profile
-  lineinfile:
-    name: /etc/profile
-    line: '.*/opt/anaconda/bin.*'
-    state: absent
-  check_mode: yes
+
+# - name: Check path in profile
+#  lineinfile:
+#    name: /etc/profile
+#    line: '.*/opt/anaconda/bin.*'
+#    state: absent
+#  check_mode: true
+#  changed_when: false
+#  register: conda_path
+
+- name: Check - Path
+  shell: grep '/opt/anaconda/bin' /etc/profile
+  register: conda_path_exists
+  # grep will exit with 1 when no results found.
+  # This causes the task not to halt play.
   changed_when: false
-  register: conda_path
-
-#- name: Check - Path
-#  shell: grep '/opt/anaconda/bin' /etc/profile
-#  register: conda_path_exists
-
+  ignore_errors: true
 
 - name: Install Conda
   block:
@@ -42,15 +45,15 @@
         mode: 0550
 
     - name: Create conda folder
-      become: True
-      become_user: root 
+      become: true
+      become_user: root
       become_method: su
       file:
         path: /opt/anaconda`
         state: directory
         owner: root
         mode: 0755
-        recurse: yes
+        recurse: true
 
     - name: Run the installer
       shell: /tmp/anaconda.sh -b -u -p /opt/anaconda
@@ -61,32 +64,32 @@
         path: /tmp/install-anaconda.sh
 
     - name: Add anaconda bin to path
-      become: True
-      become_user: root 
+      become: true
+      become_user: root
       become_method: su
       shell: echo 'export PATH=/opt/anaconda/bin:$PATH' >> /etc/profile
 
     - name: conda - read permission for all
-      become: True
-      become_user: root 
+      become: true
+      become_user: root
       become_method: su
       file:
         path: /opt/anaconda
         mode: 0775
-        recurse: yes
+        recurse: true
 
     - name: conda - execution permission for all
-      become: True
-      become_user: root 
+      become: true
+      become_user: root
       become_method: su
       file:
         path: /opt/anaconda/bin
         mode: 0775
-        recurse: yes
+        recurse: true
 
     - name: enable conda enviroment
-      become: True
-      become_user: root 
+      become: true
+      become_user: root
       become_method: su
       file:
         src: '/opt/anaconda/etc/profile.d/conda.sh'
@@ -95,13 +98,14 @@
         group: root
         mode: u=rw,g=r,o=r
         state: link
-  when: not conda_path.found      
+  when: conda_path_exists.stdout == ""
 
 - name: check for enviroment
   shell: /opt/anaconda/bin/conda env list | grep 'cromwell_test' || true
   register: conda_env_exists
-  # grep will exit with 1 when no results found. 
+  # grep will exit with 1 when no results found.
   # This causes the task not to halt play.
+  changed_when: false
   ignore_errors: true
 
 - name: install conda-forge channel

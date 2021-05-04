@@ -10,14 +10,14 @@
       path: /root/cromwell_test
       state: directory
       mode: '0755'
-      
+
   - name: Create CWL job file
     copy:
       dest: ~/cromwell_test/example-job.yaml
       content: |
         message: Hello word!
       mode: '0755'
-        
+
   - name: Create CWL file
     copy:
       dest: ~/cromwell_test/example.cwl
@@ -39,8 +39,10 @@
   - name: Run cwlrunner
     shell: |
       cd ~/cromwell_test
-      conda activate cromwell_test
-      cromwell run example.cwl -i example-job.yaml
+      /opt/anaconda/bin/conda activate
+      #/opt/anaconda/bin/conda activate cromwell_test
+    args:
+      executable: /bin/bash
 
   - name: Check output file was created
     stat:
