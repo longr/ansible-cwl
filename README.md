@@ -9,6 +9,7 @@ Here we have created various ansible tasks to install and test (using molecule) 
 
 Reana and galaxy have not been converted to use molecule yet.
 
+For the working playbooks, GitHub actions have been created to use molecule to test them in CI.
 
 ## Working
 
