@@ -1,6 +1,0 @@
----
-- hosts: all
-  roles:
-    - galaxy
-      #  vars:
-          #    - ansible_become_method: su
